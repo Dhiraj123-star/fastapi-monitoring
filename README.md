@@ -1,12 +1,13 @@
 # FastAPI Monitoring
 
-A lightweight boilerplate for a FastAPI application integrated with Prometheus monitoring and Grafana visualization using Docker and Docker Compose.
+A lightweight boilerplate for a FastAPI application integrated with Prometheus monitoring, Grafana visualization, and Traefik reverse proxy using Docker and Docker Compose.
 
 ## 🚀 Features
 
 * **FastAPI**: High-performance Python API.
 * **Prometheus**: Real-time monitoring and time-series data collection.
 * **Grafana**: Beautiful data visualization and dashboards.
+* **Traefik**: Modern reverse proxy and load balancer for domain-based routing.
 * **Dockerized**: Fully containerized environment for consistent deployment.
 * **Auto-Instrumentation**: Automatically tracks request counts, latencies, and status codes.
 
@@ -16,7 +17,17 @@ A lightweight boilerplate for a FastAPI application integrated with Prometheus m
 * **API Framework:** FastAPI
 * **Monitoring:** Prometheus
 * **Visualization:** Grafana
+* **Reverse Proxy:** Traefik v2.11
 * **Orchestration:** Docker Compose
+
+## 🌐 Local DNS Setup (Ubuntu)
+
+To access the services via domain names, add the following line to your `/etc/hosts` file:
+
+```text
+127.0.0.1 app.localhost prometheus.localhost grafana.localhost
+
+```
 
 ## 🚦 Quick Start
 
@@ -29,10 +40,13 @@ docker-compose up -d --build
 
 2. **Access the Services:**
 
-* **FastAPI App:** [http://localhost:8000](https://www.google.com/search?q=http://localhost:8000)
-* **Metrics Endpoint:** [http://localhost:8000/metrics](https://www.google.com/search?q=http://localhost:8000/metrics)
-* **Prometheus UI:** [http://localhost:9090](https://www.google.com/search?q=http://localhost:9090)
-* **Grafana Dashboard:** [http://localhost:3000](https://www.google.com/search?q=http://localhost:3000) (Login: `admin` / `admin`)
+| Service | URL | Note |
+| --- | --- | --- |
+| **FastAPI App** | [http://app.localhost](https://www.google.com/search?q=http://app.localhost) | Main API Entry |
+| **Metrics Endpoint** | [http://app.localhost/metrics](https://www.google.com/search?q=http://app.localhost/metrics) | Scraped by Prometheus |
+| **Prometheus UI** | [http://prometheus.localhost](https://www.google.com/search?q=http://prometheus.localhost) | Query raw metrics |
+| **Grafana** | [http://grafana.localhost](https://www.google.com/search?q=http://grafana.localhost) | Login: `admin` / `admin` |
+| **Traefik Dashboard** | [http://localhost:8081](https://www.google.com/search?q=http://localhost:8081) | Proxy health & routing |
 
 3. **Stop the Stack:**
 
