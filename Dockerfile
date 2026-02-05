@@ -1,5 +1,5 @@
 FROM python:3.13-slim
-
+LABEL org.opencontainers.image.source="https://github.com/Dhiraj123-star/fastapi-monitoring"
 WORKDIR /app
 
 COPY requirements.txt .
