@@ -31,6 +31,13 @@ services:
     image: ghcr.io/dhiraj123-star/fastapi-monitoring:latest
     pull_policy: always # Forces Docker to check for updates on every run
     container_name: fastapi-app
+    # --- ADD HEALTHCHECK ---
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"] # New health endpoint
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.app.rule=Host(`app.localhost`)"

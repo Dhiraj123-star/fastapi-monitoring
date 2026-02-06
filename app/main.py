@@ -3,6 +3,12 @@ from prometheus_fastapi_instrumentator import Instrumentator
 
 app = FastAPI(title="FastAPI Monitoring Service")
 
+# New health check endpoint
+@app.get("/health",tags=["Health Check"])
+async def health_check():
+    return {"status":"healthy"}
+
+
 @app.get("/")
 async def root():
     return {
