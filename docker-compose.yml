@@ -13,6 +13,10 @@ services:
       - "--providers.docker.endpoint=unix:///var/run/docker.sock"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443" # Enable HTTPS port
+      # Global HTTP -> HTTPS redirection
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entryPoint.permanent=true"
       - "--providers.file.filename=/etc/traefik/traefik_dynamic.yml" # Load the SSL configx`
     ports:
       - "80:80"
@@ -23,7 +27,9 @@ services:
       - "./traefik_dynamic.yml:/etc/traefik/traefik_dynamic.yml:ro"
 
   app:
-    build: .
+    # pulling from github registry
+    image: ghcr.io/dhiraj123-star/fastapi-monitoring:latest
+    pull_policy: always # Forces Docker to check for updates on every run
     container_name: fastapi-app
     labels:
       - "traefik.enable=true"
