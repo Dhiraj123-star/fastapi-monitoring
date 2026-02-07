@@ -90,3 +90,36 @@ services:
       - ./promtail/promtail-config.yml:/etc/promtail/config.yml
     command: -config.file=/etc/promtail/config.yml
     restart: always
+
+  db:
+    image: postgres:15-alpine
+    container_name: postgres-db
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: fastapi_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL","pg_isready -U user -d fastapi_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  
+  db-exporter:
+    image: prometheuscommunity/postgres-exporter
+    container_name: postgres-exporter
+    environment:
+      DATA_SOURCE_NAME: "postgresql://user:password@db:5432/fastapi_db?sslmode=disable"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: always
+  
+volumes:
+  postgres_data: # This persists our data on the host machine
+
+
+
+
