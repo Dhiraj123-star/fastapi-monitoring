@@ -6,9 +6,9 @@ A lightweight boilerplate for a FastAPI application integrated with Prometheus m
 
 * **FastAPI**: High-performance Python API with automated versioning.
 * **Prometheus & Grafana**: Full observability stack for real-time metrics.
-* **Traefik Proxy**: Secure **HTTPS** termination and **Auto-Redirect** (HTTP → HTTPS).
+* **Traefik Proxy**: Secure **HTTPS** termination and **Global Auto-Redirect** (HTTP → HTTPS).
+* **Health Monitoring**: Native Docker health checks ensuring container readiness before traffic routing.
 * **CI/CD**: Automated Docker builds pushed to **GitHub Container Registry (GHCR)**.
-* **Auto-Update**: Integrated **Watchtower** to automatically pull and deploy the latest GHCR images.
 * **Auto-Instrumentation**: Out-of-the-box tracking for request counts, latencies, and status codes.
 
 ## 🛠 Tech Stack
@@ -17,7 +17,7 @@ A lightweight boilerplate for a FastAPI application integrated with Prometheus m
 * **API Framework:** FastAPI
 * **Monitoring:** Prometheus & Grafana
 * **Reverse Proxy:** Traefik v2.11
-* **Automation:** GitHub Actions, GHCR, and Watchtower
+* **Automation:** GitHub Actions & GHCR
 
 ## 🌐 Local DNS & SSL Setup (Ubuntu)
 
@@ -53,15 +53,23 @@ docker-compose up -d
 
 | Service | URL | Feature |
 | --- | --- | --- |
-| **FastAPI App** | [https://app.localhost](https://www.google.com/search?q=https://app.localhost) | Secure API (Auto-Redirects from HTTP) |
+| **FastAPI App** | [https://app.localhost](https://www.google.com/search?q=https://app.localhost) | Secure API (Health Monitored) |
 | **Prometheus** | [https://prometheus.localhost](https://www.google.com/search?q=https://prometheus.localhost) | Secure Metrics Explorer |
 | **Grafana** | [https://grafana.localhost](https://www.google.com/search?q=https://grafana.localhost) | Login: `admin` / `admin` |
 | **Traefik Dash** | [http://localhost:8081](https://www.google.com/search?q=http://localhost:8081) | Infrastructure Monitoring |
 
-## 🤖 CI/CD & Auto-Deployment
+## 🏥 Health Checks
 
-### GitHub Actions
+The application now includes a self-healing health check mechanism:
 
-Every push to the `main` branch triggers a build:
+* **Endpoint:** `/health`
+* **Docker Logic:** Container is checked every 30s. If it fails 3 times, it is marked `unhealthy` and Traefik stops routing traffic to it.
 
-* **Target:** `ghcr.io/Dhiraj123-star/fastapi-monitoring:latest`
+## 🤖 CI/CD Deployment
+
+Every push to the `main` branch triggers a GitHub Action build:
+
+* **Registry Path:** `ghcr.io/Dhiraj123-star/fastapi-monitoring:latest`
+* **Pull Policy:** Set to `always` in Docker Compose to ensure the latest cloud build is used on every restart.
+
+---
