@@ -5,4 +5,7 @@ scrape_configs:
   - job_name: "fastapi-monitoring-job"
     static_configs:
       - targets: ["app:8000"] # app matches the service name in docker-compose.yml
-      
+  
+  - job_name: "postgres"
+    static_configs:
+      - targets: ["db-exporter:9187"]
